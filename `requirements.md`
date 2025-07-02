@@ -1,0 +1,147 @@
+#📋 Backend Requirements – Airbnb Clone
+
+This document outlines the technical and functional requirements for three key backend features: **User Authentication**, **Property Management**, and **Booking System**.
+
+---
+
+## 1️⃣ User Authentication
+
+### 🔧 API Endpoints
+
+| Method | Endpoint           | Description                    |
+|--------|--------------------|--------------------------------|
+| POST   | /api/register      | Register a new user            |
+| POST   | /api/login         | Authenticate user and return JWT |
+| GET    | /api/user/profile  | Retrieve logged-in user profile |
+| PUT    | /api/user/profile  | Update user profile info       |
+
+### 📥 Input / Output Specifications
+
+**Register:**
+```json
+Input:
+{
+  "name": "Jane Doe",
+  "email": "jane@example.com",
+  "password": "SecurePassword123"
+}
+Output:
+{
+  "message": "User created successfully",
+  "token": "JWT_TOKEN_HERE"
+}
+Login:
+
+json
+Copy
+Edit
+Input:
+{
+  "email": "jane@example.com",
+  "password": "SecurePassword123"
+}
+Output:
+{
+  "token": "JWT_TOKEN_HERE",
+  "user": {
+    "id": 1,
+    "name": "Jane Doe",
+    "email": "jane@example.com"
+  }
+}
+`✅ Validation Rules`
+Email must be unique and in valid format
+
+Password must be at least 8 characters, with letters and numbers
+
+All fields are required
+
+Secure password hashing using bcrypt
+
+⚙️ Performance Criteria
+JWT generation and login should respond in under 1 second
+
+Token expiration should be set securely (e.g., 24h)
+
+2️⃣ Property Management
+🔧 API Endpoints
+Method	Endpoint	Description
+POST	/api/properties	Create a new property listing
+GET	/api/properties	Retrieve all or filtered listings
+GET	/api/properties/:id	View single property details
+PUT	/api/properties/:id	Update property info
+DELETE	/api/properties/:id	Remove a property listing
+
+📥 Input / Output Specifications
+Add Property:
+
+json
+Copy
+Edit
+Input:
+{
+  "title": "Cozy Apartment in Nairobi",
+  "description": "2-bedroom near city center",
+  "location": "Nairobi, Kenya",
+  "price_per_night": 50,
+  "availability": true,
+  "amenities": ["WiFi", "Kitchen", "Parking"]
+}
+Output:
+{
+  "message": "Property added successfully",
+  "property_id": 201
+}
+✅ Validation Rules
+Title, location, price, and description are required
+
+Price must be a positive number
+
+Only users with host role can create, edit, or delete properties
+
+⚙️ Performance Criteria
+Listings query with filters must respond in under 2 seconds
+
+Property creation/edit response time should be < 1.5 seconds
+
+3️⃣ Booking System
+🔧 API Endpoints
+Method	Endpoint	Description
+POST	/api/bookings	Guest books a property
+GET	/api/bookings	View guest's booking history
+DELETE	/api/bookings/:id	Cancel a booking
+
+📥 Input / Output Specifications
+Create Booking:
+
+json
+Copy
+Edit
+Input:
+{
+  "property_id": 201,
+  "check_in": "2025-08-01",
+  "check_out": "2025-08-05",
+  "guests": 2
+}
+Output:
+{
+  "message": "Booking successful",
+  "booking_id": 501
+}
+✅ Validation Rules
+Check-in/check-out must be valid future dates
+
+Property must be available on selected dates
+
+Guests must be a positive number
+
+Prevent double bookings via date overlap check
+
+⚙️ Performance Criteria
+Availability validation must complete in < 1 second
+
+Booking confirmation and database write should be < 1.5 seconds
+
+Cancellations must update system and notify guest & host instantly
+
